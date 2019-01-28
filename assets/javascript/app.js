@@ -37,11 +37,23 @@ function questionSearch(){
     }).then(function (data) {
         console.log(data.results[0].question);
         console.log((data.results).length);
+        console.log(data.results);
         for(var i =0; i<((data.results).length); i++){
-            gameData.push(data.results[i].question)
+            
+            gameData.push({
+                question : data.results[i].question,
+                correct : data.results[i].correct_answer,
+                incorrect1 : data.results[i].incorrect_answers[0],
+                incorrect2 : data.results[i].incorrect_answers[1],
+                incorrect3 : data.results[i].incorrect_answers[2],
+            })
         }
         var randomNum = Math.floor(Math.random() * 11);
-        $question.html(gameData[randomNum]);
+        $question.html(gameData[randomNum].question);
+        $choices.eq(0).html(gameData[randomNum].correct);
+        $choices.eq(1).html(gameData[randomNum].incorrect1);
+        $choices.eq(2).html(gameData[randomNum].incorrect2);
+        $choices.eq(3).html(gameData[randomNum].incorrect3);
     })
 }
 
