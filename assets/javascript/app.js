@@ -46,9 +46,8 @@ function questionSearch() {
 }
 
 $categoryAll.on('click', function () {
-    // debugger;
     category = $(this).text();
-    queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=medium&type=multiple";
+    queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
     $('#start').fadeIn('slow');
     $('.category').fadeOut('slow');
     questionSearch();
@@ -57,7 +56,6 @@ $categoryAll.on('click', function () {
 function timerCountdown() {
     if (time > 0) {
         time--
-        console.log(time);
         $('#timer').text(time);
     }
     else if (time == 0) {
@@ -67,9 +65,19 @@ function timerCountdown() {
     }
 }
 
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
 //---------------Start Button-----------------//
 $('#start').on('click', function () {
-    // debugger;
     nextQuestion();
     $(this).fadeOut('slow');
     setInterval(timerCountdown, 500);
@@ -77,12 +85,12 @@ $('#start').on('click', function () {
 
 function nextQuestion() {
     $('#mainDisplay').fadeOut('slow',function(){
+        var questionOrder = shuffle([0,1,2,3]);
         $question.html(gameData[currentQuestion].question);
-        $choices.eq(0).html(gameData[currentQuestion].answers[0]);
-        $choices.eq(1).html(gameData[currentQuestion].answers[1]);
-        // debugger;
-        $choices.eq(2).html(gameData[currentQuestion].answers[2]);
-        $choices.eq(3).html(gameData[currentQuestion].answers[3]);
+        $choices.eq(0).html(gameData[currentQuestion].answers[questionOrder[0]]);
+        $choices.eq(1).html(gameData[currentQuestion].answers[questionOrder[1]]);
+        $choices.eq(2).html(gameData[currentQuestion].answers[questionOrder[2]]);
+        $choices.eq(3).html(gameData[currentQuestion].answers[questionOrder[3]]);
         currentQuestion++;
         $(this).fadeIn('slow');
     })
