@@ -19,6 +19,9 @@ var str = "";
 var queryURL = "";
 var currentQuestion = 0;
 var correctAnswer = "";
+var correctCount = 0;
+var winCount = 0;
+var loseCount = 0;
 
 $('document').ready(function () {
     window.onload = function () {
@@ -90,6 +93,7 @@ $('.choices').on('click',function(){
     if($(this).text() == correctAnswer){
         alert("CORRECT");
         nextQuestion();
+        correctCount++;
         time = 21;
     }else{
         alert("INCORRECT");
@@ -110,4 +114,10 @@ function nextQuestion() {
         currentQuestion++;
         $(this).fadeIn('slow');
     })
+
+    if(currentQuestion == gameData.length){
+        var result = correctCount + " Out of "+(gameData.length);
+        alert(result);
+        break;
+    }
 };
