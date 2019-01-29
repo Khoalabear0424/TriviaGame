@@ -1,13 +1,21 @@
 
 .choices{
-    transition: all 1.0s;
     color: black;
     border-radius: 10px;
 }
 
 .choices:hover{
-    transition: all 1.0s;
     font-size: 20px;
     color: green;
     border-radius: 10px;
+}
+
+.correct{
+    font-size: 20px;
+    color: green;
+}
+
+.incorrect{
+    font-size: 20px;
+    color: red;
 }

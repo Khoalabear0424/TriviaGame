@@ -26,6 +26,9 @@ var loseCount = 0;
 $('document').ready(function () {
     window.onload = function () {
         $('#start').hide();
+        $('#timeDisplay').hide();
+        $('#mainDisplay').hide();
+        $('#score').hide();
     }
 });
 
@@ -38,13 +41,13 @@ function questionSearch() {
         for (var i = 0; i < ((data.results).length); i++) {
             gameData.push({
                 question: data.results[i].question,
-                answers:[
+                answers: [
                     data.results[i].correct_answer,
                     data.results[i].incorrect_answers[0],
                     data.results[i].incorrect_answers[1],
                     data.results[i].incorrect_answers[2],
                 ],
-                correctAnswer : data.results[i].correct_answer
+                correctAnswer: data.results[i].correct_answer
             })
         }
     })
@@ -86,38 +89,42 @@ function shuffle(a) {
 $('#start').on('click', function () {
     nextQuestion();
     $(this).fadeOut('slow');
+    $('#timeDisplay').fadeIn('slow');
+    $('#mainDisplay').fadeIn('slow');
     setInterval(timerCountdown, 1000);
 });
 
-$('.choices').on('click',function(){
-    if($(this).text() == correctAnswer){
-        alert("CORRECT");
+$('.choices').on('click', function () {
+    if ($(this).text() == correctAnswer) {
+        $(this).addClass('correct');
+        setTimeout(nextQuestion, 2000);
         nextQuestion();
         correctCount++;
         time = 21;
-    }else{
-        alert("INCORRECT");
-        nextQuestion();
+    } else {
+        $(this).addClass('incorrect');
+        setTimeout(nextQuestion, 2000);
         time = 21;
     }
 });
 
 function nextQuestion() {
-    $('#mainDisplay').fadeOut('slow',function(){
-        var questionOrder = shuffle([0,1,2,3]);
+    $('#mainDisplay').fadeOut('slow', function () {
+        var questionOrder = shuffle([0, 1, 2, 3]);
         correctAnswer = gameData[currentQuestion].correctAnswer;
         $question.html(gameData[currentQuestion].question);
-        $choices.eq(0).html(gameData[currentQuestion].answers[questionOrder[0]]);
-        $choices.eq(1).html(gameData[currentQuestion].answers[questionOrder[1]]);
-        $choices.eq(2).html(gameData[currentQuestion].answers[questionOrder[2]]);
-        $choices.eq(3).html(gameData[currentQuestion].answers[questionOrder[3]]);
+
+        for (var i = 0; i < 4; i++) {
+            $choices.eq(i).html(gameData[currentQuestion].answers[questionOrder[i]]);
+            $choices.eq(i).removeClass('correct incorrect');
+        }
         currentQuestion++;
         $(this).fadeIn('slow');
     })
 
-    if(currentQuestion == gameData.length){
-        var result = correctCount + " Out of "+(gameData.length);
-        alert(result);
-        break;
+    if (currentQuestion == gameData.length) {
+        var result = correctCount + " Out of " + (gameData.length);
+        $('#result').text(result);
+        $('#score').fadeIn('slow');
     }
 };
