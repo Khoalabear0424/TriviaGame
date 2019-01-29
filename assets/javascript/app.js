@@ -89,8 +89,12 @@ $('#start').on('click', function () {
 $('.choices').on('click',function(){
     if($(this).text() == correctAnswer){
         alert("CORRECT");
+        nextQuestion();
+        time = 21;
     }else{
         alert("INCORRECT");
+        nextQuestion();
+        time = 21;
     }
 });
 
