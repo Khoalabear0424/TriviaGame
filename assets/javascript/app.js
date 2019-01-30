@@ -64,7 +64,6 @@ $categoryAll.on('click', function () {
 function timerCountdown() {
     if (time > 0) {
         time--
-        console.log(time);
         $('#timer').text(time);
     }
     else if (time == 0) {
@@ -102,6 +101,12 @@ $('.choices').on('click', function () {
         time = 21;
     } else {
         $(this).addClass('incorrect');
+        for(var i = 0; i<$choices.length; i++){
+            $choices.eq(i).addClass('notChosen');
+            if($choices.eq(i).text() == correctAnswer){
+                $choices.eq(i).addClass('correct');
+            } 
+        }
         setTimeout(nextQuestion, 1000);
         time = 21;
     }
@@ -115,7 +120,7 @@ function nextQuestion() {
 
         for (var i = 0; i < 4; i++) {
             $choices.eq(i).html(gameData[currentQuestion].answers[questionOrder[i]]);
-            $choices.eq(i).removeClass('correct incorrect');
+            $choices.eq(i).removeClass('correct incorrect notChosen');
         }
         currentQuestion++;
         $(this).fadeIn('slow');

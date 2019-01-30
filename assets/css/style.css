@@ -10,11 +10,16 @@
 }
 
 .correct{
-    font-size: 20px;
-    color: green;
+    font-size: 20px !important;
+    color: green !important;
 }
 
 .incorrect{
+    font-size: 20px !important;
+    color: red !important;
+}
+
+.notChosen{
     font-size: 20px;
-    color: red;
+    color: gray;
 }
