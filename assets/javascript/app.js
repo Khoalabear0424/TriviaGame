@@ -51,32 +51,26 @@ function questionSearch() {
                 correctAnswer: data.results[i].correct_answer
             })
         }
+        $('#start').fadeIn('slow');
     })
 }
 
-$categoryAll.on('click', function () {
-    category = $(this).text();
-    queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
-    $('#start').fadeIn('slow');
-    $('.category').fadeOut('slow');
-    questionSearch();
-});
 
 function timerCountdown() {
-    if (time < 22) {
+    if (time < 22 && time >0) {
         time--
         $('#timer').text(time);
     }
     else if (time == 0) {
         $('#timer').text(time);
-        for(var i = 0; i<$choices.length; i++){
+        for (var i = 0; i < $choices.length; i++) {
             $choices.eq(i).addClass('notChosen');
-            if($choices.eq(i).text() == correctAnswer){
+            if ($choices.eq(i).text() == correctAnswer) {
                 $choices.eq(i).addClass('correct');
-            } 
+            }
         }
-        time = 22;
-        setTimeout(nextQuestion,2000);
+        time = 23;
+        setTimeout(nextQuestion, 2000);
     } else {
         time--
     }
@@ -92,36 +86,6 @@ function shuffle(a) {
     }
     return a;
 }
-
-//---------------Start Button-----------------//
-$('#start').on('click', function () {
-    nextQuestion();
-    $(this).fadeOut('slow');
-    $('#timeDisplay').fadeIn('slow');
-    $('#mainDisplay').fadeIn('slow');
-    setInterval(timerCountdown, 1000);
-});
-
-$('.choices').on('click', function () {
-    if ($(this).text() == correctAnswer) {
-        $(this).addClass('correct');
-        setTimeout(nextQuestion, 2000);
-        correctCount++;
-        time = 22;
-    } else {
-        $(this).addClass('incorrect');
-        setTimeout(function(){
-            for(var i = 0; i<$choices.length; i++){
-                $choices.eq(i).addClass('notChosen');
-                if($choices.eq(i).text() == correctAnswer){
-                    $choices.eq(i).addClass('correct');
-                } 
-            }
-            setTimeout(nextQuestion, 1000);
-            time = 22;
-        },1000);      
-    }
-});
 
 function nextQuestion() {
     $('#mainDisplay').fadeOut('slow', function () {
@@ -141,5 +105,46 @@ function nextQuestion() {
         var result = correctCount + " Out of " + (gameData.length);
         $('#result').text(result);
         $('#score').fadeIn('slow');
+        clearInterval(timerCountdown);
     }
 };
+
+//--------------Category Button--------------//
+$categoryAll.on('click', function () {
+    category = $(this).text();
+    queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
+    $('.category').fadeOut('slow');
+    questionSearch();
+});
+
+//---------------Start Button-----------------//
+$('#start').on('click', function () {
+    nextQuestion();
+    $(this).fadeOut('slow');
+    $('#timeDisplay').fadeIn('slow',function(){
+        setInterval(timerCountdown, 1000);
+    });
+    $('#mainDisplay').fadeIn('slow');
+});
+
+$('.choices').on('click', function () {
+    if ($(this).text() == correctAnswer) {
+        $(this).addClass('correct');
+        setTimeout(nextQuestion, 2000);
+        correctCount++;
+        time = 22;
+    } else {
+        $(this).addClass('incorrect');
+        setTimeout(function () {
+            for (var i = 0; i < $choices.length; i++) {
+                $choices.eq(i).addClass('notChosen');
+                if ($choices.eq(i).text() == correctAnswer) {
+                    $choices.eq(i).addClass('correct');
+                }
+            }
+            setTimeout(nextQuestion, 1000);
+            time = 22;
+        }, 1000);
+    }
+});
+

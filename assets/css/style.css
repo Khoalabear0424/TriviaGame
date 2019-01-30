@@ -13,7 +13,7 @@
     transition: 0.5s all;
     font-size: 20px;
     border-radius: 10px;
-    background-color:lightgray;
+    background-color:rgb(233, 233, 233);
 }
 
 .choices:hover{
