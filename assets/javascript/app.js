@@ -7,7 +7,7 @@ var categoryList = {
 }
 
 var gameData = [];
-var time = 20;
+var time = 21;
 var timerState = true;
 var startButtState = true;
 var randomNum = 0;
@@ -22,6 +22,7 @@ var correctAnswer = "";
 var correctCount = 0;
 var winCount = 0;
 var loseCount = 0;
+
 
 $('document').ready(function () {
     window.onload = function () {
@@ -62,16 +63,24 @@ $categoryAll.on('click', function () {
 });
 
 function timerCountdown() {
-    if (time > 0) {
+    if (time < 22) {
         time--
         $('#timer').text(time);
     }
     else if (time == 0) {
-        time = 20;
         $('#timer').text(time);
-        nextQuestion();
+        for(var i = 0; i<$choices.length; i++){
+            $choices.eq(i).addClass('notChosen');
+            if($choices.eq(i).text() == correctAnswer){
+                $choices.eq(i).addClass('correct');
+            } 
+        }
+        time = 22;
+        setTimeout(nextQuestion,2000);
+    } else {
+        time--
     }
-}
+};
 
 function shuffle(a) {
     var j, x, i;
@@ -96,19 +105,21 @@ $('#start').on('click', function () {
 $('.choices').on('click', function () {
     if ($(this).text() == correctAnswer) {
         $(this).addClass('correct');
-        setTimeout(nextQuestion, 1000);
+        setTimeout(nextQuestion, 2000);
         correctCount++;
-        time = 21;
+        time = 22;
     } else {
         $(this).addClass('incorrect');
-        for(var i = 0; i<$choices.length; i++){
-            $choices.eq(i).addClass('notChosen');
-            if($choices.eq(i).text() == correctAnswer){
-                $choices.eq(i).addClass('correct');
-            } 
-        }
-        setTimeout(nextQuestion, 1000);
-        time = 21;
+        setTimeout(function(){
+            for(var i = 0; i<$choices.length; i++){
+                $choices.eq(i).addClass('notChosen');
+                if($choices.eq(i).text() == correctAnswer){
+                    $choices.eq(i).addClass('correct');
+                } 
+            }
+            setTimeout(nextQuestion, 1000);
+            time = 22;
+        },1000);      
     }
 });
 
