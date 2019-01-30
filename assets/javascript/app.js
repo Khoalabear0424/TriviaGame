@@ -97,13 +97,12 @@ $('#start').on('click', function () {
 $('.choices').on('click', function () {
     if ($(this).text() == correctAnswer) {
         $(this).addClass('correct');
-        setTimeout(nextQuestion, 2000);
-        nextQuestion();
+        setTimeout(nextQuestion, 1000);
         correctCount++;
         time = 21;
     } else {
         $(this).addClass('incorrect');
-        setTimeout(nextQuestion, 2000);
+        setTimeout(nextQuestion, 1000);
         time = 21;
     }
 });
