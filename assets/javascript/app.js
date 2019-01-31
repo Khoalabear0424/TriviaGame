@@ -170,4 +170,3 @@ $('.choices').on('click', function () {
     }
     choiceButtState = false;
 });
-
