@@ -112,7 +112,7 @@ function nextQuestion() {
         var result = correctCount + " Out of " + (gameData.length);
         $('#result').text(result);
         $('#score').fadeIn('slow');
-        clearInterval(timerCountdown);
+        $('#timeDisplay').fadeOut('slow');
     }
 };
 
