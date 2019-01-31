@@ -1,7 +1,10 @@
 
-
 #question{
     font-size: 30px;
+}
+
+h1{
+    padding: 20px;
 }
 
 .choices{
@@ -23,12 +26,14 @@
 
 .correct{
     font-size: 22px !important;
-    color: green !important;
+    background-color: lightgreen !important;
+    color: black !important;
 }
 
 .incorrect{
     font-size: 22px !important;
-    color: red !important;
+    background-color: lightcoral !important;
+    color: black !important;
 }
 
 .notChosen{
@@ -37,4 +42,12 @@
 
 .pointer {
     cursor: pointer;
+}
+
+#timer{
+    color: green;
+}
+
+.disabled {
+    pointer-events: none;  /**<-----------*/
 }

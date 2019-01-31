@@ -7,9 +7,10 @@ var categoryList = {
 }
 
 var gameData = [];
-var time = 21;
+var time = 0;
 var timerState = true;
 var startButtState = true;
+var choiceButtState = true;
 var randomNum = 0;
 var $categoryAll = $('a');
 var category = "";
@@ -57,8 +58,14 @@ function questionSearch() {
 
 
 function timerCountdown() {
-    if (time < 22 && time >0) {
-        time--
+    if (time < 21 && time >13) {
+        $('#timer').text(time);
+        $('#timer').css('color','green');
+    } else if(time <= 13 && time >5){
+        $('#timer').css('color','rgb(209, 197, 91)');
+        $('#timer').text(time);
+    }else if(time<=5 && time >0){
+        $('#timer').css('color','red');
         $('#timer').text(time);
     }
     else if (time == 0) {
@@ -71,9 +78,8 @@ function timerCountdown() {
         }
         time = 23;
         setTimeout(nextQuestion, 2000);
-    } else {
-        time--
-    }
+    } 
+    time--
 };
 
 function shuffle(a) {
@@ -88,6 +94,7 @@ function shuffle(a) {
 }
 
 function nextQuestion() {
+    choiceButtState = true;
     $('#mainDisplay').fadeOut('slow', function () {
         var questionOrder = shuffle([0, 1, 2, 3]);
         correctAnswer = gameData[currentQuestion].correctAnswer;
@@ -95,7 +102,7 @@ function nextQuestion() {
 
         for (var i = 0; i < 4; i++) {
             $choices.eq(i).html(gameData[currentQuestion].answers[questionOrder[i]]);
-            $choices.eq(i).removeClass('correct incorrect notChosen');
+            $choices.eq(i).removeClass('correct incorrect notChosen disabled');
         }
         currentQuestion++;
         $(this).fadeIn('slow');
@@ -119,20 +126,35 @@ $categoryAll.on('click', function () {
 
 //---------------Start Button-----------------//
 $('#start').on('click', function () {
-    nextQuestion();
-    $(this).fadeOut('slow');
+    time = 20;
+    $('#timeDisplay').fadeIn('slow');
+    setInterval(timerCountdown, 1000);
     $('#timeDisplay').fadeIn('slow',function(){
-        setInterval(timerCountdown, 1000);
+        nextQuestion();
+        $('#mainDisplay').fadeIn('slow');
     });
-    $('#mainDisplay').fadeIn('slow');
+    $(this).fadeOut('slow');
 });
 
 $('.choices').on('click', function () {
+    if(choiceButtState == false){
+        return false;
+    }
+
+    for( var i = 0; i<$choices.length; i++){
+        $choices.eq(i).addClass('disabled');
+    }
+
     if ($(this).text() == correctAnswer) {
         $(this).addClass('correct');
         setTimeout(nextQuestion, 2000);
         correctCount++;
-        time = 22;
+        time = 23;
+        for (var i = 0; i < $choices.length; i++) {
+            if ($choices.eq(i).text() != correctAnswer) {
+                $choices.eq(i).addClass('notChosen');
+            }
+        }
     } else {
         $(this).addClass('incorrect');
         setTimeout(function () {
@@ -142,9 +164,10 @@ $('.choices').on('click', function () {
                     $choices.eq(i).addClass('correct');
                 }
             }
-            setTimeout(nextQuestion, 1000);
+            setTimeout(nextQuestion, 2000);
             time = 22;
-        }, 1000);
+        }, 1500);
     }
+    choiceButtState = false;
 });
 
