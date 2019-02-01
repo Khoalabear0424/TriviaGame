@@ -31,6 +31,8 @@ $('document').ready(function () {
         $('#timeDisplay').hide();
         $('#mainDisplay').hide();
         $('#score').hide();
+        $('.secondCol').hide();
+        $('.catRow').hide();
     }
 });
 
@@ -121,6 +123,7 @@ $categoryAll.on('click', function () {
     category = $(this).text();
     queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
     $('.category').fadeOut('slow');
+    gameData = [];
     questionSearch();
 });
 
@@ -169,4 +172,28 @@ $('.choices').on('click', function () {
         }, 1500);
     }
     choiceButtState = false;
+});
+
+
+$('.catButt').on('click',function(){
+    var state = $(this).attr('data-state');
+    position = parseInt($(this).attr('data-position'));
+    if(state == "true"){
+        // for(var i = 0; i < $('.catButt').length; i++){
+        //     if(i != position){
+        //         $('.catRow').eq(position).slideUp('slow');
+        //         $('.secondCol').eq(position).fadeOut();
+        //         $('.catButt').attr('data-state',"true");
+        //     } 
+        // }
+        $('.catRow').eq(position).slideDown('slow');
+        setTimeout(function(){
+            $('.secondCol').eq(position).fadeIn('slow');
+        },1000);
+        $(this).attr('data-state',"false");
+    }else if (state == "false"){
+        $('.catRow').eq(position).slideUp('slow');
+        $('.secondCol').eq(position).fadeOut();
+        $(this).attr('data-state',"true");
+    }
 });

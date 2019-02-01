@@ -1,3 +1,6 @@
+body{
+    background-image: url(../images/background.png);
+}
 
 #question{
     font-size: 30px;
@@ -50,4 +53,31 @@ h1{
 
 .disabled {
     pointer-events: none;  /**<-----------*/
+}
+
+.category h5{
+    border-bottom: 1px black solid;
+}
+
+.categoryDisplay{
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255, 0.7);
+}
+
+.col-6 img{
+    width: 100%;
+    padding: 6px 0px 6px 6px;
+}
+
+.col-6 p{
+    width: 100%;
+    padding: 6px 6px 6px 0px;
+}
+
+.firstCol{
+    padding-right: 6px !important;
+}
+
+.secondCol{
+    padding-left: 6px !important;
 }
