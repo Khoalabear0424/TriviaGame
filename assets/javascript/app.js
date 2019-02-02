@@ -143,9 +143,9 @@ $categoryAll.on('click', function () {
 //---------------Start Button-----------------//
 $('#start').on('click', function () {
     time = 21;
-    $('#timeDisplay').fadeIn('slow');
     setInterval(timerCountdown, 1000);
     $('#categoryAll').fadeOut('slow', function () {
+        $('#timeDisplay').fadeIn('slow');
         $('.categoryRow').eq(position).slideUp('slow');
         $('#mainDisplay').fadeIn('slow');
         $('#timeDisplay').fadeIn('slow', function () {
