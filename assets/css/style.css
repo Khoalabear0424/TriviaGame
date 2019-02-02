@@ -121,7 +121,7 @@ h1{
     }
     
     #catAll{
-        width: 80%;
+        width: 70%;
     }
 }
 
@@ -149,6 +149,10 @@ h1{
     }
     
     #catAll{
-        width: 60%;
+        max-width: 60%;
+    }
+
+    .container{
+        max-width: 800px !important; 
     }
 }

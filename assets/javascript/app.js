@@ -12,7 +12,7 @@ var timerState = true;
 var startButtState = true;
 var choiceButtState = true;
 var randomNum = 0;
-var $categoryAll = $('a');
+var $categoryAll = $('.categoryButt');
 var category = "";
 var $question = $('#question');
 var $choices = $('.choices');
@@ -121,7 +121,7 @@ function nextQuestion() {
 $categoryAll.on('click', function () {
     category = $(this).text();
     queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
-    $('.category').fadeOut('slow');
+    // $('.category').fadeOut('slow');
     gameData = [];
     questionSearch();
 });
@@ -131,9 +131,11 @@ $('#start').on('click', function () {
     time = 20;
     $('#timeDisplay').fadeIn('slow');
     setInterval(timerCountdown, 1000);
-    $('#timeDisplay').fadeIn('slow',function(){
-        nextQuestion();
-        $('#mainDisplay').fadeIn('slow');
+        $('#categoryAll').fadeOut('slow',function(){
+            $('#mainDisplay').fadeIn('slow');
+            $('#timeDisplay').fadeIn('slow',function(){
+                nextQuestion();
+        });
     });
     $(this).fadeOut('slow');
 });
