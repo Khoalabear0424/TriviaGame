@@ -23,6 +23,7 @@ var correctAnswer = "";
 var correctCount = 0;
 var winCount = 0;
 var loseCount = 0;
+var position = 0;
 
 
 $('document').ready(function () {
@@ -32,6 +33,7 @@ $('document').ready(function () {
         $('#mainDisplay').hide();
         $('#score').hide();
         $('.categoryRow').hide();
+        $('#reset').hide();
     }
 });
 
@@ -59,14 +61,14 @@ function questionSearch() {
 
 
 function timerCountdown() {
-    if (time < 21 && time >13) {
+    if (time < 21 && time > 13) {
         $('#timer').text(time);
-        $('#timer').css('color','green');
-    } else if(time <= 13 && time >5){
-        $('#timer').css('color','rgb(209, 197, 91)');
+        $('#timer').css('color', 'green');
+    } else if (time <= 13 && time > 5) {
+        $('#timer').css('color', 'rgb(209, 197, 91)');
         $('#timer').text(time);
-    }else if(time<=5 && time >0){
-        $('#timer').css('color','red');
+    } else if (time <= 5 && time > 0) {
+        $('#timer').css('color', 'red');
         $('#timer').text(time);
     }
     else if (time == 0) {
@@ -79,7 +81,7 @@ function timerCountdown() {
         }
         time = 23;
         setTimeout(nextQuestion, 2000);
-    } 
+    }
     time--
 };
 
@@ -114,8 +116,20 @@ function nextQuestion() {
         $('#result').text(result);
         $('#score').fadeIn('slow');
         $('#timeDisplay').fadeOut('slow');
+        setTimeout($('#reset').show(), 2000);
     }
 };
+
+function resetGame() {
+    time = 100;
+    $('#timeDisplay').fadeOut('slow');
+    $('#mainDisplay').fadeOut('slow');
+    $('#categoryAll').fadeIn('slow');
+    $('#score').fadeOut('slow');
+    for (var i = 0; i < $('.categoryButt').length; i++) {
+        $('.categoryRow').eq(i).attr('data-state', "true");
+    }
+}
 
 //--------------Category Button--------------//
 $categoryAll.on('click', function () {
@@ -131,21 +145,22 @@ $('#start').on('click', function () {
     time = 21;
     $('#timeDisplay').fadeIn('slow');
     setInterval(timerCountdown, 1000);
-        $('#categoryAll').fadeOut('slow',function(){
-            $('#mainDisplay').fadeIn('slow');
-            $('#timeDisplay').fadeIn('slow',function(){
-                nextQuestion();
+    $('#categoryAll').fadeOut('slow', function () {
+        $('.categoryRow').eq(position).slideUp('slow');
+        $('#mainDisplay').fadeIn('slow');
+        $('#timeDisplay').fadeIn('slow', function () {
+            nextQuestion();
         });
     });
     $(this).fadeOut('slow');
 });
 
 $('.choices').on('click', function () {
-    if(choiceButtState == false){
+    if (choiceButtState == false) {
         return false;
     }
 
-    for( var i = 0; i<$choices.length; i++){
+    for (var i = 0; i < $choices.length; i++) {
         $choices.eq(i).addClass('disabled');
     }
 
@@ -176,10 +191,10 @@ $('.choices').on('click', function () {
 });
 
 
-$('.categoryButt').on('click',function(){
+$('.categoryButt').on('click', function () {
     var state = $(this).attr('data-state');
     position = parseInt($(this).attr('data-position'));
-    if(state == "true"){
+    if (state == "true") {
         // for(var i = 0; i < $('.categoryButt').length; i++){
         //     if(i != position){
         //         $('.categoryRow').eq(position).slideUp('slow');
@@ -188,9 +203,15 @@ $('.categoryButt').on('click',function(){
         //     } 
         // }
         $('.categoryRow').eq(position).slideDown('slow');
-        $(this).attr('data-state',"false");
-    }else if (state == "false"){
+        $(this).attr('data-state', "false");
+    } else if (state == "false") {
         $('.categoryRow').eq(position).slideUp('slow');
-        $(this).attr('data-state',"true");
+        $(this).attr('data-state', "true");
     }
 });
+
+$('#reset').on('click', function () {
+    gameData = [];
+    resetGame();
+    $(this).fadeOut('slow');
+})
