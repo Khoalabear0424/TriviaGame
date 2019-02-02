@@ -128,7 +128,7 @@ $categoryAll.on('click', function () {
 
 //---------------Start Button-----------------//
 $('#start').on('click', function () {
-    time = 20;
+    time = 21;
     $('#timeDisplay').fadeIn('slow');
     setInterval(timerCountdown, 1000);
         $('#categoryAll').fadeOut('slow',function(){
