@@ -212,6 +212,7 @@ $('.categoryButt').on('click', function () {
 
 $('#reset').on('click', function () {
     gameData = [];
+    correctCount = 0;
     resetGame();
     $(this).fadeOut('slow');
 })
