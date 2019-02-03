@@ -24,6 +24,7 @@ var correctCount = 0;
 var winCount = 0;
 var loseCount = 0;
 var position = 0;
+var intervalId; 
 
 
 $('document').ready(function () {
@@ -38,12 +39,10 @@ $('document').ready(function () {
 });
 
 function questionSearch() {
-    console.log('questionsSeach');
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (data) {
-        console.log(data.results);
         for (var i = 0; i < ((data.results).length); i++) {
             gameData.push({
                 question: data.results[i].question,
@@ -62,7 +61,6 @@ function questionSearch() {
 
 
 function timerCountdown() {
-    console.log('timerCountdown');
     if (time < 21 && time > 13) {
         $('#timer').text(time);
         $('#timer').css('color', 'green');
@@ -99,17 +97,16 @@ function shuffle(a) {
 }
 
 function nextQuestion() {
-    console.log('nextquestion');
     choiceButtState = true;
     if (currentQuestion == gameData.length && gameData.length > 0) {
-        console.log('nextquestion end');
         $('#mainDisplay').fadeOut('slow');
         var result = correctCount + " Out of " + (gameData.length);
         $('#result').text(result);
-        $('#score').fadeIn('slow');
-        $('#timeDisplay').fadeOut('slow');
-        $('#reset').fadeIn('slow');
-        time = 100;
+        clearInterval(intervalId);
+        $('#timeDisplay').fadeOut('slow',function(){
+            $('#score').fadeIn('slow');
+            $('#reset').fadeIn('slow');
+        });
         
         $question.text("");
         for (var i = 0; i < 4; i++) {
@@ -118,7 +115,6 @@ function nextQuestion() {
         }
 
     } else {
-        console.log('nextquestion else');
         $('#mainDisplay').fadeOut('slow', function () {
             var questionOrder = shuffle([0, 1, 2, 3]);
             correctAnswer = gameData[currentQuestion].correctAnswer;
@@ -135,8 +131,6 @@ function nextQuestion() {
 };
 
 function resetGame() {
-    console.log('resetGame');
-    time = 100;
     gameData = [];
     timerState = true;
     startButtState = true;
@@ -155,17 +149,16 @@ function resetGame() {
         $('.categoryRow').eq(i).attr('data-state', "true");
     }
     $('#timeDisplay').fadeOut('slow');
-    $('#score').fadeOut('slow');
-
-    $('#categoryAll').fadeIn('slow');
-    $('#start').fadeIn('slow');
+    $('#score').fadeOut('slow',function(){
+        $('#categoryAll').fadeIn('slow');
+    });
 
 }
 
 //--------------Category Button--------------//
 $categoryAll.on('click', function () {
     category = $(this).text();
-    queryURL = "https://opentdb.com/api.php?amount=2&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
+    queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
     // $('.category').fadeOut('slow');
     gameData = [];
     questionSearch();
@@ -174,7 +167,8 @@ $categoryAll.on('click', function () {
 //---------------Start Button-----------------//
 $('#start').on('click', function () {
     time = 21;
-    setInterval(timerCountdown, 1000);
+    intervalId = setInterval(timerCountdown, 1000);
+    intervalId 
     $('#categoryAll').fadeOut('slow', function () {
         $('#timeDisplay').fadeIn('slow');
         $('.categoryRow').eq(position).slideUp('slow');
