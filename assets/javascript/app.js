@@ -13,9 +13,9 @@ var startButtState = true;
 var choiceButtState = true;
 var randomNum = 0;
 var $categoryAll = $('.categoryButt');
-var category = "";
 var $question = $('#question');
 var $choices = $('.choices');
+var category = "";
 var str = "";
 var queryURL = "";
 var currentQuestion = 0;
@@ -38,6 +38,7 @@ $('document').ready(function () {
 });
 
 function questionSearch() {
+    console.log('questionsSeach');
     $.ajax({
         url: queryURL,
         method: "GET"
@@ -61,6 +62,7 @@ function questionSearch() {
 
 
 function timerCountdown() {
+    console.log('timerCountdown');
     if (time < 21 && time > 13) {
         $('#timer').text(time);
         $('#timer').css('color', 'green');
@@ -97,44 +99,73 @@ function shuffle(a) {
 }
 
 function nextQuestion() {
+    console.log('nextquestion');
     choiceButtState = true;
-    $('#mainDisplay').fadeOut('slow', function () {
-        var questionOrder = shuffle([0, 1, 2, 3]);
-        correctAnswer = gameData[currentQuestion].correctAnswer;
-        $question.html(gameData[currentQuestion].question);
-
-        for (var i = 0; i < 4; i++) {
-            $choices.eq(i).html(gameData[currentQuestion].answers[questionOrder[i]]);
-            $choices.eq(i).removeClass('correct incorrect notChosen disabled');
-        }
-        currentQuestion++;
-        $(this).fadeIn('slow');
-    })
-
-    if (currentQuestion == gameData.length) {
+    if (currentQuestion == gameData.length && gameData.length > 0) {
+        console.log('nextquestion end');
+        $('#mainDisplay').fadeOut('slow');
         var result = correctCount + " Out of " + (gameData.length);
         $('#result').text(result);
         $('#score').fadeIn('slow');
         $('#timeDisplay').fadeOut('slow');
-        setTimeout($('#reset').show(), 2000);
+        $('#reset').fadeIn('slow');
+        time = 100;
+        
+        $question.text("");
+        for (var i = 0; i < 4; i++) {
+            $choices.eq(i).text("");
+            $choices.eq(i).removeClass('correct incorrect notChosen disabled');
+        }
+
+    } else {
+        console.log('nextquestion else');
+        $('#mainDisplay').fadeOut('slow', function () {
+            var questionOrder = shuffle([0, 1, 2, 3]);
+            correctAnswer = gameData[currentQuestion].correctAnswer;
+            $question.html(gameData[currentQuestion].question);
+
+            for (var i = 0; i < 4; i++) {
+                $choices.eq(i).html(gameData[currentQuestion].answers[questionOrder[i]]);
+                $choices.eq(i).removeClass('correct incorrect notChosen disabled');
+            }
+            currentQuestion++;
+            $(this).fadeIn('slow');
+        })
     }
 };
 
 function resetGame() {
+    console.log('resetGame');
     time = 100;
-    $('#timeDisplay').fadeOut('slow');
-    $('#mainDisplay').fadeOut('slow');
-    $('#categoryAll').fadeIn('slow');
-    $('#score').fadeOut('slow');
+    gameData = [];
+    timerState = true;
+    startButtState = true;
+    choiceButtState = true;
+    randomNum = 0;
+    category = "";
+    str = "";
+    queryURL = "";
+    currentQuestion = 0;
+    correctAnswer = "";
+    correctCount = 0;
+    winCount = 0;
+    loseCount = 0;
+    position = 0;
     for (var i = 0; i < $('.categoryButt').length; i++) {
         $('.categoryRow').eq(i).attr('data-state', "true");
     }
+    $('#timeDisplay').fadeOut('slow');
+    $('#score').fadeOut('slow');
+
+    $('#categoryAll').fadeIn('slow');
+    $('#start').fadeIn('slow');
+
 }
 
 //--------------Category Button--------------//
 $categoryAll.on('click', function () {
     category = $(this).text();
-    queryURL = "https://opentdb.com/api.php?amount=10&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
+    queryURL = "https://opentdb.com/api.php?amount=2&category=" + categoryList[category] + "&difficulty=easy&type=multiple";
     // $('.category').fadeOut('slow');
     gameData = [];
     questionSearch();
@@ -147,8 +178,7 @@ $('#start').on('click', function () {
     $('#categoryAll').fadeOut('slow', function () {
         $('#timeDisplay').fadeIn('slow');
         $('.categoryRow').eq(position).slideUp('slow');
-        $('#mainDisplay').fadeIn('slow');
-        $('#timeDisplay').fadeIn('slow', function () {
+        $('#mainDisplay').fadeIn('slow', function () {
             nextQuestion();
         });
     });
@@ -211,8 +241,6 @@ $('.categoryButt').on('click', function () {
 });
 
 $('#reset').on('click', function () {
-    gameData = [];
-    correctCount = 0;
     resetGame();
     $(this).fadeOut('slow');
 })
